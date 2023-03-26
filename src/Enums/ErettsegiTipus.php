@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum ErettsegiTipus :string
+enum ErettsegiTipus: string
 {
     case Kozep = 'közép';
 
