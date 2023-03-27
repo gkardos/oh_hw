@@ -4,7 +4,8 @@ namespace App\Tests\Service;
 
 use App\Bulder\CalculationInputModelBuiilder;
 use App\Model\CalculationInputModel;
-use App\Service\Checker\MinimalResultCalcilationChecker;
+use App\Service\Checker\MinimalResultCalculationChecker;
+use App\Service\Checker\RequiredSubjectsCalculationChecker;
 use App\Service\Exception\CalculationException;
 use App\Service\PontszmitasCalculatorService;
 use PHPUnit\Framework\TestCase;
@@ -78,7 +79,8 @@ class PontszmitasCalculatorServiceTest extends TestCase
     {
         return new PontszmitasCalculatorService(
             [
-                new MinimalResultCalcilationChecker()
+                new MinimalResultCalculationChecker(),
+                new RequiredSubjectsCalculationChecker()
             ]
         );
     }

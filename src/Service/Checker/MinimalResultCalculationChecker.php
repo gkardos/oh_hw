@@ -6,7 +6,7 @@ use App\Model\CalculationInputModel;
 use App\Service\Exception\CalculationException;
 use App\Service\Interface\CalculationCheckerInterface;
 
-class MinimalResultCalcilationChecker implements CalculationCheckerInterface
+class MinimalResultCalculationChecker implements CalculationCheckerInterface
 {
     const MIN_RESULT = 20;
 
