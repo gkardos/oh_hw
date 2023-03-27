@@ -4,6 +4,7 @@ namespace App\Tests\Service;
 
 use App\Bulder\CalculationInputModelBuiilder;
 use App\Model\CalculationInputModel;
+use App\Service\Checker\MinimalResultCalcilationChecker;
 use App\Service\Exception\CalculationException;
 use App\Service\PontszmitasCalculatorService;
 use PHPUnit\Framework\TestCase;
@@ -49,7 +50,7 @@ class PontszmitasCalculatorServiceTest extends TestCase
     {
         //Given
         $object = $this->getObject();
-        $inputModel = $this->buildInputModel($this->getData2());
+        $inputModel = $this->buildInputModel($this->getData3());
 
         //Then
         $this->expectException(CalculationException::class);
@@ -63,7 +64,7 @@ class PontszmitasCalculatorServiceTest extends TestCase
     {
         //Given
         $object = $this->getObject();
-        $inputModel = $this->buildInputModel($this->getData2());
+        $inputModel = $this->buildInputModel($this->getData4());
 
         //Then
         $this->expectException(CalculationException::class);
@@ -75,7 +76,11 @@ class PontszmitasCalculatorServiceTest extends TestCase
 
     private function getObject(): PontszmitasCalculatorService
     {
-        return new PontszmitasCalculatorService();
+        return new PontszmitasCalculatorService(
+            [
+                new MinimalResultCalcilationChecker()
+            ]
+        );
     }
 
     private function buildInputModel($data): CalculationInputModel
