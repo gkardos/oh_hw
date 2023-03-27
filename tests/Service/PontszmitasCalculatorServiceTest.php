@@ -4,13 +4,19 @@ namespace App\Tests\Service;
 
 use App\Bulder\CalculationInputModelBuiilder;
 use App\Model\CalculationInputModel;
+use App\Service\Calculator\AlappontKotelezoCalculator;
+use App\Service\Calculator\AlappontValaszthatoCalculator;
+use App\Service\Calculator\TobbletpontEmeltErettsegiCalculator;
+use App\Service\Calculator\TobbletpontNyelvCalculator;
 use App\Service\Checker\MinimalResultCalculationChecker;
 use App\Service\Checker\RequiredSubjectsCalculationChecker;
-use App\Service\Exception\CalculationException;
+use App\Service\Exception\CalculationCheckerException;
+use App\Service\KovetelmenyService;
 use App\Service\PontszmitasCalculatorService;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class PontszmitasCalculatorServiceTest extends TestCase
+class PontszmitasCalculatorServiceTest extends KernelTestCase
 {
 
     private CalculationInputModelBuiilder $builder;
@@ -54,7 +60,7 @@ class PontszmitasCalculatorServiceTest extends TestCase
         $inputModel = $this->buildInputModel($this->getData3());
 
         //Then
-        $this->expectException(CalculationException::class);
+        $this->expectException(CalculationCheckerException::class);
         $this->expectExceptionMessage('hiba, nem lehetséges a pontszámítás a kötelező érettségi tárgyak hiánya miatt');
 
         //When
@@ -68,7 +74,7 @@ class PontszmitasCalculatorServiceTest extends TestCase
         $inputModel = $this->buildInputModel($this->getData4());
 
         //Then
-        $this->expectException(CalculationException::class);
+        $this->expectException(CalculationCheckerException::class);
         $this->expectExceptionMessage('hiba, nem lehetséges a pontszámítás a magyar nyelv és irodalom tárgyból elért 20% alatti eredmény miatt');
 
         //When
@@ -77,10 +83,20 @@ class PontszmitasCalculatorServiceTest extends TestCase
 
     private function getObject(): PontszmitasCalculatorService
     {
+        $requiredSubjects = ['magyar nyelv és irodalom', 'történelem', 'matematika'];
+
         return new PontszmitasCalculatorService(
             [
                 new MinimalResultCalculationChecker(),
-                new RequiredSubjectsCalculationChecker()
+                new RequiredSubjectsCalculationChecker($requiredSubjects)
+            ],
+            [
+                new AlappontKotelezoCalculator($requiredSubjects, new KovetelmenyService()),
+                new AlappontValaszthatoCalculator($requiredSubjects, new KovetelmenyService())
+            ],
+            [
+                new TobbletpontNyelvCalculator(),
+                new TobbletpontEmeltErettsegiCalculator(new KovetelmenyService())
             ]
         );
     }

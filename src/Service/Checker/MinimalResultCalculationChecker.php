@@ -3,7 +3,7 @@
 namespace App\Service\Checker;
 
 use App\Model\CalculationInputModel;
-use App\Service\Exception\CalculationException;
+use App\Service\Exception\CalculationCheckerException;
 use App\Service\Interface\CalculationCheckerInterface;
 
 class MinimalResultCalculationChecker implements CalculationCheckerInterface
@@ -14,7 +14,7 @@ class MinimalResultCalculationChecker implements CalculationCheckerInterface
     {
        foreach ($inputModel->getErettsegiEredmenyek() as $eredmeny) {
            if ($eredmeny->getEredmeny() < self::MIN_RESULT) {
-              throw new CalculationException(
+              throw new CalculationCheckerException(
                   sprintf('hiba, nem lehetséges a pontszámítás a %s tárgyból elért %d%% alatti eredmény miatt',
                     $eredmeny->getNev(),
                     self::MIN_RESULT
